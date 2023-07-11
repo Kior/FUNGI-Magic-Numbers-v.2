@@ -8,12 +8,12 @@ public class MagicNumbers : MonoBehaviour
     #region Variables
 
     public TMP_Text Count;
-    public TMP_Text Text;
-    
+
     public int DefaultMax = 1000;
     public int DefaultMin = 1;
     public Button DownButton;
     public Button GuessButton;
+    public TMP_Text Text;
     public Button UpButton;
 
     private int _guess;
@@ -32,30 +32,6 @@ public class MagicNumbers : MonoBehaviour
         UpButton.onClick.AddListener(OnUpButtonClicked);
         GuessButton.onClick.AddListener(OnGuessButtonClicked);
         Restart();
-    }
-
-    private void OnGuessButtonClicked()
-    {
-        SetText($"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы завершить новую игру. Значения min, max и guess будут сброшены. Либо нажми ESC чтобы завершить игру.");
-        _isNewGame = true;
-    }
-
-    private void OnUpButtonClicked()
-    {
-        _min = _guess;
-        _press++;
-        CalculateGuess();
-        AskAboutGuess();
-        TurnCount();
-    }
-
-    private void OnDownButtonClicked()
-    {
-        _max = _guess;
-        _press++;
-        CalculateGuess();
-        AskAboutGuess();
-        TurnCount();
     }
 
     private void Update()
@@ -93,7 +69,8 @@ public class MagicNumbers : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
-            SetText($"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы завершить новую игру. Значения min, max и guess будут сброшены. Либо нажми ESC чтобы завершить игру.");
+            SetText(
+                $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы завершить новую игру. Значения min, max и guess будут сброшены. Либо нажми ESC чтобы завершить игру.");
             _isNewGame = true;
         }
     }
@@ -110,6 +87,31 @@ public class MagicNumbers : MonoBehaviour
     private void CalculateGuess()
     {
         _guess = (_min + _max) / 2;
+    }
+
+    private void OnDownButtonClicked()
+    {
+        _max = _guess;
+        _press++;
+        CalculateGuess();
+        AskAboutGuess();
+        TurnCount();
+    }
+
+    private void OnGuessButtonClicked()
+    {
+        SetText(
+            $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы завершить новую игру. Значения min, max и guess будут сброшены. Либо нажми ESC чтобы завершить игру.");
+        _isNewGame = true;
+    }
+
+    private void OnUpButtonClicked()
+    {
+        _min = _guess;
+        _press++;
+        CalculateGuess();
+        AskAboutGuess();
+        TurnCount();
     }
 
     private void Restart()
