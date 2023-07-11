@@ -12,8 +12,10 @@ public class MagicNumbers : MonoBehaviour
     public int DefaultMax = 1000;
     public int DefaultMin = 1;
     public Button DownButton;
+    public Button ExitButton;
     public Button GuessButton;
-    public TMP_Text Text;
+    public TMP_Text Label;
+    public Button RestartButton;
     public Button UpButton;
 
     private int _guess;
@@ -28,6 +30,8 @@ public class MagicNumbers : MonoBehaviour
 
     private void Start()
     {
+        ExitButton.onClick.AddListener(OnExitButtonClicked);
+        RestartButton.onClick.AddListener(OnRestartButtonClicked);
         DownButton.onClick.AddListener(OnDownButtonClicked);
         UpButton.onClick.AddListener(OnUpButtonClicked);
         GuessButton.onClick.AddListener(OnGuessButtonClicked);
@@ -53,25 +57,16 @@ public class MagicNumbers : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _max = _guess;
-            _press++;
-            CalculateGuess();
-            AskAboutGuess();
-            TurnCount();
+            OnDownButtonClicked();
+
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _min = _guess;
-            _press++;
-            CalculateGuess();
-            AskAboutGuess();
-            TurnCount();
+            OnUpButtonClicked();
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
-            SetText(
-                $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы завершить новую игру. Значения min, max и guess будут сброшены. Либо нажми ESC чтобы завершить игру.");
-            _isNewGame = true;
+            OnGuessButtonClicked();
         }
     }
 
@@ -95,7 +90,15 @@ public class MagicNumbers : MonoBehaviour
         _press++;
         CalculateGuess();
         AskAboutGuess();
-        TurnCount();
+        SetCountText();
+    }
+
+    private void OnExitButtonClicked()
+    {
+        if (_isNewGame)
+        {
+            SceneManager.LoadScene("WinScene");
+        }
     }
 
     private void OnGuessButtonClicked()
@@ -105,40 +108,45 @@ public class MagicNumbers : MonoBehaviour
         _isNewGame = true;
     }
 
+    private void OnRestartButtonClicked()
+    {
+        _max = DefaultMax;
+        _min = DefaultMin;
+        _press = 0;
+        SetText($"Привет! Загадай число от {_min} до {_max}");
+        SetCountText($"Количество ходов {_press}.");
+        CalculateGuess();
+        AskAboutGuess();
+        _isNewGame = false;
+    }
+
     private void OnUpButtonClicked()
     {
         _min = _guess;
         _press++;
         CalculateGuess();
         AskAboutGuess();
-        TurnCount();
+        SetCountText();
     }
 
     private void Restart()
     {
-        _max = DefaultMax;
-        _min = DefaultMin;
-        _press = 0;
-        SetText($"Привет! Загадай число от {_min} до {_max}");
-        CalculateGuess();
-        AskAboutGuess();
-        _isNewGame = false;
-        //ctrl + R + M, быстро создать метод на повторяющиеся строки.
+        OnRestartButtonClicked();
     }
 
-    private void SetCount(string count)
+    private void SetCountText(string count)
     {
         Count.text = count;
     }
 
-    private void SetText(string text)
+    private void SetCountText()
     {
-        Text.text = text;
+        SetCountText($"Количество ходов {_press}.");
     }
 
-    private void TurnCount()
+    private void SetText(string text)
     {
-        SetCount($"Количество ходов {_press}.");
+        Label.text = text;
     }
 
     #endregion

@@ -8,8 +8,9 @@ namespace DefaultNamespace
     {
         #region Variables
 
-        public Button StartButton;
         public Button ExitButton;
+
+        public Button StartButton;
 
         #endregion
 
@@ -21,16 +22,18 @@ namespace DefaultNamespace
             ExitButton.onClick.AddListener(OnExitButtonClicked);
         }
 
-        private void OnExitButtonClicked()
-        {
-            Application.Quit();
-            UnityEditor.EditorApplication.isPlaying = false;
-            Debug.Log("Зачем вышел? Играй давай.");
-        }
-
         #endregion
 
         #region Private methods
+
+        private void OnExitButtonClicked()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+            Debug.Log("Зачем вышел? Играй давай.");
+#endif
+            Application.Quit();
+        }
 
         private void OnStartButtonClicked()
         {
