@@ -101,7 +101,7 @@ public class MagicNumbers : MonoBehaviour
     private void OnGuessButtonClicked()
     {
         SetText(
-            $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы завершить новую игру. Значения min, max и guess будут сброшены. Либо нажми ESC чтобы завершить игру.");
+            $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы перезапустить игру или ESC чтобы завершить игру.");
         _isNewGame = true;
     }
 
