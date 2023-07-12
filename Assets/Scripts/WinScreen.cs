@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,8 +7,10 @@ public class WinScreen : MonoBehaviour
 {
     #region Variables
 
-    public Button RestartButton;
+    public TMP_Text CountLabel;
     public Button ExitButton;
+
+    public Button RestartButton;
 
     #endregion
 
@@ -17,6 +20,8 @@ public class WinScreen : MonoBehaviour
     {
         RestartButton.onClick.AddListener(OnRestartButtonClicked);
         ExitButton.onClick.AddListener(OnExitButtonClicked);
+
+        CountLabel.text = $"Количество ходов:{MagicNumbers.GetCount}";
     }
 
     #endregion
@@ -25,12 +30,12 @@ public class WinScreen : MonoBehaviour
 
     private void OnExitButtonClicked()
     {
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene(SceneName.Start);
     }
 
     private void OnRestartButtonClicked()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene(SceneName.Game);
     }
 
     #endregion

@@ -28,16 +28,12 @@ namespace DefaultNamespace
 
         private void OnExitButtonClicked()
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-            Debug.Log("Зачем вышел? Играй давай.");
-#endif
-            Application.Quit();
+            ApllicationQuiteService.Quit();
         }
 
         private void OnStartButtonClicked()
         {
-            SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene(SceneName.Game);
         }
 
         #endregion

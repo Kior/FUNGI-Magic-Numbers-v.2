@@ -22,7 +22,12 @@ public class MagicNumbers : MonoBehaviour
     private bool _isNewGame;
     private int _max;
     private int _min;
-    private int _press;
+
+    #endregion
+
+    #region Properties
+
+    public static int GetCount { get; private set; }
 
     #endregion
 
@@ -35,6 +40,8 @@ public class MagicNumbers : MonoBehaviour
         DownButton.onClick.AddListener(OnDownButtonClicked);
         UpButton.onClick.AddListener(OnUpButtonClicked);
         GuessButton.onClick.AddListener(OnGuessButtonClicked);
+        ExitButton.gameObject.SetActive(false);
+        RestartButton.gameObject.SetActive(false);
         Restart();
     }
 
@@ -49,7 +56,7 @@ public class MagicNumbers : MonoBehaviour
 
             if (_isNewGame && Input.GetKeyDown(KeyCode.Escape))
             {
-                SceneManager.LoadScene("WinScene");
+                SceneManager.LoadScene(SceneName.Win);
             }
 
             return;
@@ -76,7 +83,7 @@ public class MagicNumbers : MonoBehaviour
 
     private void AskAboutGuess()
     {
-        SetText($"Твоё число {_guess}?");
+        SetLabelText($"Твоё число {_guess}?");
     }
 
     private void CalculateGuess()
@@ -87,7 +94,7 @@ public class MagicNumbers : MonoBehaviour
     private void OnDownButtonClicked()
     {
         _max = _guess;
-        _press++;
+        GetCount++;
         CalculateGuess();
         AskAboutGuess();
         SetCountText();
@@ -97,33 +104,37 @@ public class MagicNumbers : MonoBehaviour
     {
         if (_isNewGame)
         {
-            SceneManager.LoadScene("WinScene");
+            SceneManager.LoadScene(SceneName.Win);
         }
     }
 
     private void OnGuessButtonClicked()
     {
-        SetText(
-            $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {_press} ходов! Нажми пробел чтобы перезапустить игру или ESC чтобы завершить игру.");
+        SetLabelText(
+            $"Поздравляю! Я угадал! Твоё число {_guess}. Сделано {GetCount} ходов! Нажми пробел чтобы перезапустить игру или ESC чтобы завершить игру.");
         _isNewGame = true;
+        ExitButton.gameObject.SetActive(true);
+        RestartButton.gameObject.SetActive(true);
     }
 
     private void OnRestartButtonClicked()
     {
         _max = DefaultMax;
         _min = DefaultMin;
-        _press = 0;
-        SetText($"Привет! Загадай число от {_min} до {_max}");
-        SetCountText($"Количество ходов {_press}.");
+        GetCount = 0;
+        SetLabelText($"Привет! Загадай число от {_min} до {_max}");
+        SetCountText($"Количество ходов {GetCount}");
         CalculateGuess();
         AskAboutGuess();
         _isNewGame = false;
+        ExitButton.gameObject.SetActive(false);
+        RestartButton.gameObject.SetActive(false);
     }
 
     private void OnUpButtonClicked()
     {
         _min = _guess;
-        _press++;
+        GetCount++;
         CalculateGuess();
         AskAboutGuess();
         SetCountText();
@@ -141,10 +152,10 @@ public class MagicNumbers : MonoBehaviour
 
     private void SetCountText()
     {
-        SetCountText($"Количество ходов {_press}.");
+        SetCountText($"Количество ходов {GetCount}");
     }
 
-    private void SetText(string text)
+    private void SetLabelText(string text)
     {
         Label.text = text;
     }
